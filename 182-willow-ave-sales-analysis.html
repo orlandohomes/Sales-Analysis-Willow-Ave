@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sales Analysis: 182 Willow Ave, Altamonte Springs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFFFF; --wash:#F1F5F3; --ink:#17312F; --muted:#55706C;
+  --lake:#25625E; --reed:#9DB8A6; --sun:#C7852B; --sun-soft:#F6E7D0;
+  --rule:#D5DFDA; --good:#2F7A4F; --warn:#A8532A;
+  --pending:#6D8FB3; --active:#9DB8A6; --sold:#25625E;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1C1B; --wash:#162826; --ink:#E4EEEA; --muted:#9BB3AE;
+    --lake:#6FB3AC; --reed:#4F7466; --sun:#E0A24C; --sun-soft:#3A2C18;
+    --rule:#2A403D; --good:#6CC08E; --warn:#E08A5E;
+    --pending:#8FB0D4; --active:#6E9582; --sold:#6FB3AC;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1C1B; --wash:#162826; --ink:#E4EEEA; --muted:#9BB3AE;
+  --lake:#6FB3AC; --reed:#4F7466; --sun:#E0A24C; --sun-soft:#3A2C18;
+  --rule:#2A403D; --good:#6CC08E; --warn:#E08A5E;
+  --pending:#8FB0D4; --active:#6E9582; --sold:#6FB3AC;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:"Newsreader",Georgia,"Times New Roman",serif;font-weight:600;line-height:1.15;margin:0}
+h2{font-size:1.9rem;margin-bottom:.4rem}
+h3{font-size:1.25rem;margin-bottom:.4rem}
+p{margin:0 0 1rem;max-width:72ch}
+.lede{color:var(--muted);max-width:68ch}
+section{padding:56px 0;border-top:1px solid var(--rule)}
+.small{font-size:.85rem;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+
+/* Hero */
+header.hero{padding:48px 0 40px}
+.brand{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:.9rem;color:var(--muted);margin-bottom:40px}
+.brand strong{color:var(--ink);font-weight:600}
+.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);letter-spacing:-.01em}
+.hero .sub{font-size:1.1rem;color:var(--muted);margin-top:8px}
+.verdict{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:0;margin-top:36px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.verdict > div{padding:22px 24px;border-right:1px solid var(--rule)}
+.verdict > div:last-child{border-right:0}
+.verdict .k{font-size:.9rem;color:var(--muted);margin-bottom:6px}
+.verdict .v{font-family:"Newsreader",Georgia,serif;font-size:2.3rem;line-height:1.05}
+.verdict .main{background:var(--sun-soft)}
+.verdict .main .v{color:var(--ink)}
+.verdict .note{font-size:.88rem;color:var(--muted);margin-top:6px}
+
+/* Subject */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+dl.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;margin:0}
+dl.facts dt{color:var(--muted)}
+dl.facts dd{margin:0;font-weight:500}
+ul.clean{margin:0;padding-left:1.1rem}
+ul.clean li{margin-bottom:.55rem;max-width:66ch}
+.tag{display:inline-block;font-size:.78rem;font-weight:600;padding:2px 8px;border-radius:3px;vertical-align:1px}
+.tag.plus{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.tag.check{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+
+/* Stats strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:28px}
+.stat .v{font-family:"Newsreader",Georgia,serif;font-size:2rem;line-height:1.1}
+.stat .k{font-size:.9rem;color:var(--muted)}
+
+/* Ladder */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ladder{min-width:720px;margin-top:24px}
+.ladder svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:18px;font-size:.85rem;color:var(--muted);margin-top:10px}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px;background:var(--c)}
+
+/* Tables */
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top;white-space:nowrap}
+th{font-weight:600;color:var(--muted);font-size:.82rem;background:var(--wash)}
+td.r,th.r{text-align:right}
+tr.group td{background:transparent;font-family:"Newsreader",Georgia,serif;font-size:1.1rem;font-weight:600;padding-top:22px;color:var(--ink);border-bottom:2px solid var(--ink)}
+tr.key td{background:color-mix(in srgb,var(--sun) 8%,transparent)}
+td.wrap-cell{white-space:normal;min-width:220px;color:var(--muted)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+
+/* Adjustment grid */
+.adj td.pos{color:var(--good)}
+.adj td.neg{color:var(--warn)}
+.adj tr.total td{font-weight:700;border-top:2px solid var(--ink);border-bottom:0}
+.adj tr.base td{font-weight:600}
+.reconcile{margin-top:28px;display:grid;grid-template-columns:1fr 1.4fr;gap:32px;align-items:start}
+.bigbox{border-left:4px solid var(--sun);padding:6px 0 6px 20px}
+.bigbox .v{font-family:"Newsreader",Georgia,serif;font-size:2.6rem;line-height:1.05}
+
+/* DOM bars */
+.bars{margin-top:22px;display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:190px 1fr 64px;align-items:center;gap:14px;font-size:.9rem}
+.bar .track{height:14px;background:var(--wash);border-radius:2px;position:relative}
+.bar .fill{height:100%;border-radius:2px;background:var(--c)}
+.bar .d{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.bar .lbl small{display:block;color:var(--muted);font-size:.78rem}
+.groups{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:36px}
+.groups .g{border-top:3px solid var(--c);padding-top:14px}
+.groups .g .v{font-family:"Newsreader",Georgia,serif;font-size:1.9rem}
+
+/* Timeline */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);margin-top:28px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.timeline div{padding:18px 20px;border-right:1px solid var(--rule)}
+.timeline div:last-child{border-right:0;background:var(--sun-soft)}
+.timeline .k{font-size:.85rem;color:var(--muted)}
+.timeline .v{font-family:"Newsreader",Georgia,serif;font-size:1.5rem}
+
+/* Scenarios */
+.scen tr.rec td{background:var(--sun-soft);font-weight:600}
+.scen td.wrap-cell{min-width:260px}
+
+footer{padding:40px 0 56px;border-top:1px solid var(--rule);font-size:.8rem;color:var(--muted)}
+footer p{max-width:none}
+
+@media (max-width:820px){
+  .verdict,.two,.reconcile,.groups{grid-template-columns:1fr}
+  .verdict > div{border-right:0;border-bottom:1px solid var(--rule)}
+  .verdict > div:last-child{border-bottom:0}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .timeline{grid-template-columns:1fr 1fr}
+  .timeline div:nth-child(2){border-right:0}
+  .timeline div:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+  .bar{grid-template-columns:130px 1fr 48px}
+  section{padding:40px 0}
+}
+@media print{
+  section{break-inside:avoid-page;padding:28px 0}
+  .scroll{overflow:visible}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="hero">
+  <div class="brand">
+    <span><strong>Rebeca Lima</strong>, Realtor&reg;, Verandah Properties LLC</span>
+    <span>Prepared September 21, 2026</span>
+  </div>
+  <h1>182 Willow Avenue</h1>
+  <div class="sub">Altamonte Springs, FL 32714. Lake Harriet Estates. 3 bedrooms, 2.5 baths, 1,236 sq ft, built 1959.</div>
+
+  <div class="verdict">
+    <div class="main">
+      <div class="k">Recommended list price</div>
+      <div class="v num">$314,900</div>
+      <div class="note">$254.77 per sq ft. Estimated market value $312,500.</div>
+    </div>
+    <div>
+      <div class="k">Expected sale price</div>
+      <div class="v num">$305k to $312k</div>
+      <div class="note">Based on 97% to 98% sale-to-list in this neighborhood.</div>
+    </div>
+    <div>
+      <div class="k">Days to contract, if priced right</div>
+      <div class="v num">14 to 30</div>
+      <div class="note">About 45 to 90 days from listing to closing.</div>
+    </div>
+  </div>
+</header>
+</div>
+
+<section>
+<div class="wrap two">
+  <div>
+    <h2>The home</h2>
+    <p class="lede">A block home on an oversized lot in the Forest City, Teague and Lake Brantley school zone, fully remodeled before its 2019 sale and improved again since.</p>
+    <dl class="facts num">
+      <dt>MLS history</dt><dd>O5767469, sold 05/16/2019 for $199,000</dd>
+      <dt>Heated area</dt><dd>1,236 sq ft (1,592 total)</dd>
+      <dt>Lot</dt><dd>0.20 acre, 8,625 sq ft, fenced</dd>
+      <dt>Parking</dt><dd>1-car attached garage (20x12)</dd>
+      <dt>Construction</dt><dd>Block, shingle roof, slab</dd>
+      <dt>Utilities</dt><dd>Septic, natural gas, gas water heater</dd>
+      <dt>Flood zone</dt><dd>X (panel 12117C0145F)</dd>
+      <dt>HOA</dt><dd>None</dd>
+      <dt>Zoning</dt><dd>R-1A</dd>
+    </dl>
+  </div>
+  <div>
+    <h3>What buyers will pay for</h3>
+    <ul class="clean">
+      <li><span class="tag plus">Added value</span> Bathroom converted to a full bath. The 2019 layout had two half baths sharing a shower room, which buyers and appraisers read as a weakness. It now counts as 2.5 baths, more than most comps.</li>
+      <li><span class="tag plus">Added value</span> New electrical panel, a key item for insurers on a 1959 home.</li>
+      <li><span class="tag plus">Added value</span> Granite kitchen with island and stainless appliances, walk-in primary closet.</li>
+      <li><span class="tag plus">Added value</span> Wired concrete block workshop shed, covered rear porch, large backyard.</li>
+      <li><span class="tag plus">Added value</span> Flood zone X. Three of the closest comps (141 Alhambra, 117 Dahlia, 133 Dahlia Ct) sit in AE, where buyers face flood insurance.</li>
+      <li><span class="tag plus">Added value</span> A real garage. Nearly every Lake Harriet comp has a carport or nothing.</li>
+    </ul>
+    <h3 style="margin-top:22px">Confirm before listing</h3>
+    <ul class="clean">
+      <li><span class="tag check">Verify</span> Roof and A/C age. The two strongest comps list a 2022 roof; if ours is older, expect buyers to price it in.</li>
+      <li><span class="tag check">Verify</span> Permits for the bath conversion and panel. Lenders, insurers and appraisers will ask.</li>
+      <li><span class="tag check">Verify</span> Update public records and MLS to 2.5 baths. Records still show 1 full and 1 half.</li>
+      <li><span class="tag check">Verify</span> Consider a septic pump and inspection report. 163 Lake Harriet did this and marketed the clear result.</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+  <h2>Where the market is</h2>
+  <p class="lede">Twelve listings within the search area over the last 180 days. Supply is tight and there is no active listing in Lake Harriet Estates right now. The three actives are larger Brookhollow and Pearl Lake homes priced at $385,000 and up, so they don't compete directly with this home.</p>
+  <div class="stats">
+    <div class="stat"><div class="v num">7</div><div class="k">Sold in 180 days (about 1.2 per month)</div></div>
+    <div class="stat"><div class="v num">2.6 mo</div><div class="k">Supply at the current pace (3 actives)</div></div>
+    <div class="stat"><div class="v num">97.2%</div><div class="k">Median sale-to-list ratio</div></div>
+    <div class="stat"><div class="v num">$315,000</div><div class="k">Median sale price</div></div>
+  </div>
+
+  <div class="scroll"><div class="ladder" role="img" aria-label="Price ladder showing sold, pending and active comps from $240,000 to $430,000, with the recommended range for 182 Willow between $305,000 and $320,000.">
+    <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" font-family="Public Sans, system-ui, sans-serif">
+      <!-- scale: $235k at x=40, $435k at x=980 ; 4.7 px per $1k -->
+      <rect x="370.4" y="16" width="70.5" height="244" fill="var(--sun-soft)"/>
+      <line x1="415.1" y1="16" x2="415.1" y2="260" stroke="var(--sun)" stroke-width="2"/>
+      <text x="415.1" y="12" text-anchor="middle" font-size="13" font-weight="700" fill="var(--sun)">List $314,900</text>
+
+      <g font-size="13" fill="var(--muted)">
+        <text x="4" y="84">Sold</text>
+        <text x="4" y="164">Pending</text>
+        <text x="4" y="244">Active</text>
+      </g>
+      <g stroke="var(--rule)">
+        <line x1="60" y1="80" x2="980" y2="80"/>
+        <line x1="60" y1="160" x2="980" y2="160"/>
+        <line x1="60" y1="240" x2="980" y2="240"/>
+      </g>
+
+      <!-- Sold row y=80 -->
+      <!-- positions: x = 40 + (price-235)*4.7 -->
+      <circle cx="80.1" cy="80" r="7" fill="var(--sold)"/>
+      <circle cx="87.5" cy="80" r="7" fill="var(--sold)" opacity=".75"/>
+      <circle cx="134" cy="80" r="7" fill="var(--sold)"/>
+      <circle cx="416.0" cy="80" r="7" fill="var(--sold)"/>
+      <circle cx="493.9" cy="80" r="7" fill="var(--sold)"/>
+      <circle cx="557.0" cy="80" r="7" fill="var(--sold)"/>
+      <circle cx="768.5" cy="80" r="7" fill="var(--sold)"/>
+      <g font-size="11.5" fill="var(--ink)" text-anchor="middle">
+        <text x="80" y="104">126 Willow</text><text x="80" y="118" fill="var(--muted)">$243,750</text>
+        <text x="100" y="58">133 Dahlia Ct</text><text x="100" y="44" fill="var(--muted)">$245,000</text>
+        <text x="160" y="104">2581 Jans</text><text x="160" y="118" fill="var(--muted)">$255,000</text>
+        <text x="416" y="104">141 Alhambra</text><text x="416" y="118" fill="var(--muted)">$315,000</text>
+        <text x="494" y="58">103 Alhambra</text><text x="494" y="44" fill="var(--muted)">$332,000</text>
+        <text x="557" y="104">1021 Bonita</text><text x="557" y="118" fill="var(--muted)">$345,000</text>
+        <text x="768" y="104">179 Alder</text><text x="768" y="118" fill="var(--muted)">$390,000</text>
+      </g>
+
+      <!-- Pending row y=160 -->
+      <circle cx="340.8" cy="160" r="7" fill="var(--pending)"/>
+      <circle cx="369" cy="160" r="7" fill="var(--pending)"/>
+      <g font-size="11.5" fill="var(--ink)" text-anchor="middle">
+        <text x="330" y="184">117 Dahlia</text><text x="330" y="198" fill="var(--muted)">$299,000</text>
+        <text x="369" y="146" text-anchor="end" dx="-8">163 Lake Harriet $305,000</text>
+      </g>
+
+      <!-- Active row y=240 -->
+      <circle cx="745" cy="240" r="7" fill="none" stroke="var(--lake)" stroke-width="2.5"/>
+      <circle cx="886" cy="240" r="7" fill="none" stroke="var(--lake)" stroke-width="2.5"/>
+      <circle cx="933" cy="240" r="7" fill="none" stroke="var(--lake)" stroke-width="2.5"/>
+      <g font-size="11.5" fill="var(--ink)" text-anchor="middle">
+        <text x="745" y="264">1015 Bonita</text><text x="745" y="278" fill="var(--muted)">$385,000</text>
+        <text x="870" y="220">1016 Cathy</text><text x="870" y="206" fill="var(--muted)">$415,000</text>
+        <text x="940" y="264">1150 Magnolia</text><text x="940" y="278" fill="var(--muted)">$425,000</text>
+      </g>
+
+      <!-- axis -->
+      <g font-size="11" fill="var(--muted)" text-anchor="middle">
+        <text x="110.5" y="296">$250k</text>
+        <text x="345.5" y="296">$300k</text>
+        <text x="580.5" y="296">$350k</text>
+        <text x="815.5" y="296">$400k</text>
+      </g>
+    </svg>
+  </div></div>
+  <div class="legend">
+    <span style="--c:var(--sold)">Sold (sale price)</span>
+    <span style="--c:var(--pending)">Pending (list price)</span>
+    <span style="--c:var(--lake)">Active (list price)</span>
+    <span style="--c:var(--sun)">Supported range for 182 Willow, $305k to $320k</span>
+  </div>
+  <p class="small" style="margin-top:14px">Below $260,000 are cash sales of homes needing work. Above $345,000 are larger homes (1,695 to 2,358 sq ft), pool homes, or a home with an in-law suite. The updated, 3 to 4 bedroom Lake Harriet homes all cluster between $299,000 and $332,000.</p>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+  <h2>All comparables</h2>
+  <p class="lede">Highlighted rows are the four closest matches used in the adjustment grid below.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr>
+      <th>Address</th><th>Subdivision</th><th class="r">Bd/Ba</th><th class="r">Built</th><th class="r">Sq ft</th><th class="r">Acres</th><th>Parking</th><th class="r">List</th><th class="r">Sold</th><th class="r">$/sq ft</th><th class="r">SP/LP</th><th class="r">DOM</th><th>Notes</th>
+    </tr></thead>
+    <tbody>
+      <tr class="key"><td><strong>182 Willow Ave (subject)</strong></td><td>Lake Harriet</td><td class="r">3/2.5</td><td class="r">1959</td><td class="r">1,236</td><td class="r">0.20</td><td>1-car garage</td><td class="r">$314,900</td><td class="r"></td><td class="r">$255</td><td class="r"></td><td class="r"></td><td class="wrap-cell">Remodeled, bath converted to full, new panel, flood zone X</td></tr>
+
+      <tr class="group"><td colspan="13">Sold</td></tr>
+      <tr class="key"><td>141 Alhambra Ave</td><td>Lake Harriet</td><td class="r">3/2</td><td class="r">1970</td><td class="r">1,084</td><td class="r">0.22</td><td>2 carport</td><td class="r">$324,000</td><td class="r">$315,000</td><td class="r">$291</td><td class="r">97.2%</td><td class="r">91</td><td class="wrap-cell">Full $100k remodel, 2022 roof and HVAC, replumb. Started at $349,000. $9,450 seller credit. Flood AE. Closed 07/20/26.</td></tr>
+      <tr class="key"><td>103 Alhambra Ave</td><td>Lake Harriet</td><td class="r">4/2</td><td class="r">1971</td><td class="r">1,170</td><td class="r">0.43</td><td>1 carport</td><td class="r">$337,900</td><td class="r">$332,000</td><td class="r">$284</td><td class="r">98.3%</td><td class="r">26</td><td class="wrap-cell">Remodeled 2023, new HVAC and panel 2023, oversized corner lot on pond. FHA, no credit. Closed 05/22/26.</td></tr>
+      <tr><td>179 Alder Ct</td><td>Lake Harriet</td><td class="r">3/3</td><td class="r">1959</td><td class="r">1,705</td><td class="r">0.44</td><td>1 carport</td><td class="r">$390,000</td><td class="r">$390,000</td><td class="r">$229</td><td class="r">100%</td><td class="r">161</td><td class="wrap-cell">Renovated, 400 sq ft in-law suite, paid solar. 451 days to contract, $11,700 credit. Closed 03/31/26.</td></tr>
+      <tr><td>1021 Bonita Dr</td><td>Brookhollow</td><td class="r">4/3</td><td class="r">1978</td><td class="r">2,358</td><td class="r">0.31</td><td>2-car garage</td><td class="r">$365,000</td><td class="r">$345,000</td><td class="r">$146</td><td class="r">94.5%</td><td class="r">0</td><td class="wrap-cell">Pool home needing TLC, estate sale, cash. Closed 07/24/26.</td></tr>
+      <tr><td>2581 Jans Way</td><td>Little Washington</td><td class="r">2/1</td><td class="r">1955</td><td class="r">874</td><td class="r">0.29</td><td>None</td><td class="r">$249,500</td><td class="r">$255,000</td><td class="r">$292</td><td class="r">102.2%</td><td class="r">3</td><td class="wrap-cell">Window A/C, well, dirt road. $7,090 credit. Closed 09/17/26.</td></tr>
+      <tr><td>133 Dahlia Ct</td><td>Lake Harriet</td><td class="r">3/1.5</td><td class="r">1970</td><td class="r">1,820</td><td class="r">0.35</td><td>1 carport</td><td class="r">$289,999</td><td class="r">$245,000</td><td class="r">$135</td><td class="r">84.5%</td><td class="r">34</td><td class="wrap-cell">Investor fixer, HVAC needs replacing, flood AE. Cash. Closed 07/06/26.</td></tr>
+      <tr><td>126 Willow Ave</td><td>Pearl Lake Hts</td><td class="r">3/2.5</td><td class="r">1968</td><td class="r">1,486</td><td class="r">0.20</td><td>None</td><td class="r">$260,000</td><td class="r">$243,750</td><td class="r">$164</td><td class="r">93.8%</td><td class="r">2</td><td class="wrap-cell">Fixer, as-is, new septic. Cash. Closed 05/05/26.</td></tr>
+
+      <tr class="group"><td colspan="13">Pending</td></tr>
+      <tr class="key"><td>163 Lake Harriet Dr</td><td>Lake Harriet</td><td class="r">3/2</td><td class="r">1959</td><td class="r">1,382</td><td class="r">0.24</td><td>1-car garage</td><td class="r">$305,000</td><td class="r"></td><td class="r">$221</td><td class="r"></td><td class="r">29</td><td class="wrap-cell">Closest match. 2022 roof, 2013 AC, septic inspected, LVP, fresh paint. Flood X.</td></tr>
+      <tr class="key"><td>117 Dahlia Dr</td><td>Lake Harriet</td><td class="r">4/1.5</td><td class="r">1970</td><td class="r">1,170</td><td class="r">0.30</td><td>2 carport</td><td class="r">$299,000</td><td class="r"></td><td class="r">$256</td><td class="r"></td><td class="r">10</td><td class="wrap-cell">2023 roof, 2025 windows, solar paid at closing. Flood AE.</td></tr>
+
+      <tr class="group"><td colspan="13">Active</td></tr>
+      <tr><td>1015 Bonita Dr</td><td>Brookhollow</td><td class="r">3/2</td><td class="r">1974</td><td class="r">1,695</td><td class="r">0.27</td><td>3-car garage</td><td class="r">$385,000</td><td class="r"></td><td class="r">$227</td><td class="r"></td><td class="r">10</td><td class="wrap-cell">As-is, 2023 roof, 2004 AC. Reduced from $399,900.</td></tr>
+      <tr><td>1016 Cathy Dr</td><td>Brookhollow</td><td class="r">4/2</td><td class="r">1974</td><td class="r">1,720</td><td class="r">0.35</td><td>2-car garage</td><td class="r">$415,000</td><td class="r"></td><td class="r">$241</td><td class="r"></td><td class="r">10</td><td class="wrap-cell">Pool, original kitchen and baths, old roof and HVAC. Reduced from $435,000.</td></tr>
+      <tr><td>1150 Magnolia Dr</td><td>Pearl Lake Hts</td><td class="r">3/2.5</td><td class="r">1958</td><td class="r">1,760</td><td class="r">0.43</td><td>1-car + carport</td><td class="r">$425,000</td><td class="r"></td><td class="r">$241</td><td class="r"></td><td class="r">62</td><td class="wrap-cell">2021 kitchen, 2022 roof, primary suite addition. No offers after 62 days.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+  <h2>Adjusting the closest comps</h2>
+  <p class="lede">Each comp is adjusted to look like 182 Willow. A positive number means the subject has something the comp lacks; a negative number means the comp is better on that point. Size is adjusted at $50 per sq ft. For pendings the list price is used until they close.</p>
+  <div class="scroll">
+  <table class="adj">
+    <thead><tr><th></th><th class="r">163 Lake Harriet</th><th class="r">141 Alhambra</th><th class="r">103 Alhambra</th><th class="r">117 Dahlia</th></tr></thead>
+    <tbody>
+      <tr class="base"><td>Price (net of seller credit)</td><td class="r">$305,000 list</td><td class="r">$305,550</td><td class="r">$332,000</td><td class="r">$299,000 list</td></tr>
+      <tr><td>Bedrooms</td><td class="r">0</td><td class="r">0</td><td class="r neg">-$8,000</td><td class="r neg">-$8,000</td></tr>
+      <tr><td>Heated sq ft</td><td class="r neg">-$7,300</td><td class="r pos">+$7,600</td><td class="r pos">+$3,300</td><td class="r pos">+$3,300</td></tr>
+      <tr><td>Bathrooms</td><td class="r pos">+$5,000</td><td class="r pos">+$5,000</td><td class="r pos">+$5,000</td><td class="r pos">+$10,000</td></tr>
+      <tr><td>Lot size and setting</td><td class="r neg">-$2,000</td><td class="r">0</td><td class="r neg">-$10,000</td><td class="r neg">-$4,000</td></tr>
+      <tr><td>Garage vs carport</td><td class="r">0</td><td class="r pos">+$5,000</td><td class="r pos">+$5,000</td><td class="r pos">+$5,000</td></tr>
+      <tr><td>Flood zone X vs AE</td><td class="r">0</td><td class="r pos">+$5,000</td><td class="r">0</td><td class="r pos">+$5,000</td></tr>
+      <tr><td>Condition and interior finish</td><td class="r pos">+$5,000</td><td class="r neg">-$15,000</td><td class="r neg">-$8,000</td><td class="r">0</td></tr>
+      <tr><td>Roof, HVAC, windows, solar</td><td class="r neg">-$5,000</td><td class="r">incl. above</td><td class="r">incl. above</td><td class="r neg">-$12,000</td></tr>
+      <tr><td>New electrical panel</td><td class="r pos">+$3,000</td><td class="r pos">+$3,000</td><td class="r">0</td><td class="r pos">+$3,000</td></tr>
+      <tr><td>Block workshop shed</td><td class="r pos">+$3,000</td><td class="r pos">+$3,000</td><td class="r pos">+$3,000</td><td class="r">0</td></tr>
+      <tr><td>Net adjustment</td><td class="r">+$1,700</td><td class="r">+$13,600</td><td class="r">-$9,700</td><td class="r">+$2,300</td></tr>
+      <tr class="total"><td>Indicated value for 182 Willow</td><td class="r">$306,700</td><td class="r">$319,150</td><td class="r">$322,300</td><td class="r">$301,300</td></tr>
+      <tr><td class="small">Weight in final value</td><td class="r small">30%</td><td class="r small">25%</td><td class="r small">25%</td><td class="r small">20%</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="reconcile">
+    <div class="bigbox">
+      <div class="small">Reconciled market value</div>
+      <div class="v num">$312,500</div>
+      <div class="small">$252.83 per sq ft. Range $305,000 to $320,000.</div>
+    </div>
+    <div>
+      <p>163 Lake Harriet gets the most weight. It is the same age, same subdivision, same flood zone and has a garage, and it went pending at $305,000 after 29 days. Our home is smaller but has the extra half bath, a better kitchen and the new panel.</p>
+      <p>The closed Alhambra sales set the ceiling. They are the only updated Lake Harriet homes that sold, at $305,550 net and $332,000. The $332,000 sale had a fourth bedroom and a lot twice our size, so it's the top of what an appraiser can support here, not the target.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+  <h2>How fast it should sell</h2>
+  <p class="lede">Days on market in this area are driven by price, not by the house. Updated homes priced at value went under contract in 10 to 29 days. The ones listed above value sat for months and still sold in the same range.</p>
+
+  <div class="bars">
+    <div class="bar" style="--c:var(--good)"><div class="lbl">117 Dahlia Dr<small>Updated, priced at value</small></div><div class="track"><div class="fill" style="width:6.2%"></div></div><div class="d">10</div></div>
+    <div class="bar" style="--c:var(--good)"><div class="lbl">103 Alhambra Ave<small>Updated, priced at value</small></div><div class="track"><div class="fill" style="width:16.1%"></div></div><div class="d">26</div></div>
+    <div class="bar" style="--c:var(--good)"><div class="lbl">163 Lake Harriet Dr<small>Updated, priced at value</small></div><div class="track"><div class="fill" style="width:18%"></div></div><div class="d">29</div></div>
+    <div class="bar" style="--c:var(--warn)"><div class="lbl">1150 Magnolia Dr<small>Updated, priced high, still active</small></div><div class="track"><div class="fill" style="width:38.5%"></div></div><div class="d">62+</div></div>
+    <div class="bar" style="--c:var(--warn)"><div class="lbl">141 Alhambra Ave<small>Started at $349,000, cut to $324,000</small></div><div class="track"><div class="fill" style="width:56.5%"></div></div><div class="d">91</div></div>
+    <div class="bar" style="--c:var(--warn)"><div class="lbl">179 Alder Ct<small>Priced high, tenant occupied</small></div><div class="track"><div class="fill" style="width:100%"></div></div><div class="d">161</div></div>
+    <div class="bar" style="--c:var(--muted)"><div class="lbl">Fixers and cash sales<small>126 Willow, 2581 Jans, 1021 Bonita, 133 Dahlia Ct</small></div><div class="track"><div class="fill" style="width:21.1%"></div></div><div class="d">0 to 34</div></div>
+  </div>
+
+  <div class="groups">
+    <div class="g" style="--c:var(--good)"><div class="v num">22 days</div><p class="small">Average for updated homes priced at value. This is the group 182 Willow belongs to at $314,900.</p></div>
+    <div class="g" style="--c:var(--warn)"><div class="v num">105 days</div><p class="small">Average for updated homes priced above value. 141 Alhambra listed $34,000 high and still closed at $315,000, after a price cut and a $9,450 credit.</p></div>
+    <div class="g" style="--c:var(--muted)"><div class="v num">10 days</div><p class="small">Average for investor fixers. Investors are active here, which keeps a floor under pricing.</p></div>
+  </div>
+
+  <h3 style="margin-top:44px">Projected timeline at $314,900</h3>
+  <div class="timeline">
+    <div><div class="k">First two weekends</div><div class="v">Peak showings</div></div>
+    <div><div class="k">Under contract</div><div class="v num">14 to 30 days</div></div>
+    <div><div class="k">Contract to close</div><div class="v num">30 to 60 days</div></div>
+    <div><div class="k">Listing to closing</div><div class="v num">45 to 90 days</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Contract-to-close ranged from 23 days (103 Alhambra, FHA) to about 60 days (163 Lake Harriet and 117 Dahlia, scheduled closings 09/23 and 09/25). Fall listings typically see fewer buyers than spring, so the first 30 days matter most. If there are no offers by day 21 with steady showings, the price is the issue and a $5,000 adjustment is the fix.</p>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+  <h2>Pricing scenarios</h2>
+  <p class="lede">Every scenario tends to end in roughly the same sale price. The list price mainly decides how long it takes to get there and how much negotiating leverage the buyer has.</p>
+  <div class="scroll">
+  <table class="scen">
+    <thead><tr><th>List price</th><th class="r">$/sq ft</th><th class="r">Days to contract</th><th class="r">Likely sale</th><th>What to expect</th></tr></thead>
+    <tbody>
+      <tr><td>$309,900</td><td class="r">$250.73</td><td class="r">7 to 14</td><td class="r">$305k to $312k</td><td class="wrap-cell">Most traffic, strongest chance of multiple offers. Sits right beside the two pendings.</td></tr>
+      <tr class="rec"><td>$314,900 (recommended)</td><td class="r">$254.77</td><td class="r">14 to 30</td><td class="r">$305k to $312k</td><td class="wrap-cell">Stays under the $315,000 search break, leaves room to negotiate, fully supported by the comps.</td></tr>
+      <tr><td>$324,900</td><td class="r">$262.86</td><td class="r">45 to 90</td><td class="r">$303k to $310k</td><td class="wrap-cell">Likely one price reduction and a larger credit request, the 141 Alhambra pattern.</td></tr>
+      <tr><td>$339,900</td><td class="r">$275.00</td><td class="r">90+</td><td class="r">$300k to $308k</td><td class="wrap-cell">Above every updated Lake Harriet sale. Appraisal risk for financed buyers and a stale listing.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="wrap two">
+  <div>
+    <h2>Recommendation</h2>
+    <p>List at <strong>$314,900</strong>, targeting a sale between $305,000 and $312,000 and a contract within 14 to 30 days. The home is the only updated 3-bedroom in Lake Harriet Estates coming to market, and once the two pendings close, buyers in the $300,000 range will have nothing else like it with a garage and flood zone X.</p>
+    <p>Since the 2019 purchase at $199,000, the estimated value of $312,500 is a gain of about 57%.</p>
+  </div>
+  <div>
+    <h3>Marketing focus</h3>
+    <ul class="clean">
+      <li>Lead with the 2.5 baths, new electrical panel and flood zone X. These separate it from the AE comps and the older 1959 homes.</li>
+      <li>Photograph the workshop shed and backyard. Few homes at this price offer that space.</li>
+      <li>Have roof age, A/C age, permits and a wind mitigation report ready at launch. Insurance cost is a deciding factor for buyers of 1950s homes.</li>
+      <li>Accept FHA, VA and conventional offers. Two of the four key comps closed with FHA or conventional financing.</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<div class="wrap">
+<footer>
+  <p>Prepared by Rebeca Lima, Realtor&reg;, Verandah Properties LLC. Data from Stellar MLS and CoreLogic as of 09/21/2026. This is an opinion of value and comparative market analysis, not an appraisal, and was not prepared under the Uniform Standards of Professional Appraisal Practice. Adjustments are estimates for pricing guidance. All information is deemed reliable but not guaranteed.</p>
+</footer>
+</div>
+
+</body>
+</html>
